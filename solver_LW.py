@@ -1,7 +1,7 @@
 # Title: 2st order solver, SPM (age), no mortality/reproduction
 # Author: Stephen Williams
 # Date: 27th September 2023
-# Notes:
+# Notes: Was refactored into the code function_LW.py.
 
 import numpy as np # Numpy for numpy
 import matplotlib.pyplot as plt

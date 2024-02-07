@@ -9,8 +9,8 @@ import matplotlib.pyplot as plt
 
 def LW_SPM(ds,dt,ntag,filename):
 
-    Smax = 15 # Maximum size to calculate
-    Tmax = 1 # End time
+    Smax = 20 # Maximum size to calculate
+    Tmax = 50 # End time
     Nsizes = int(Smax/ds)+1 # Total number of size-steps
     Ntimes = int(Tmax/dt)+1 # Total number of time-steps
     sizes = np.linspace(0,Smax,num=Nsizes) # Grid of size points
@@ -19,13 +19,15 @@ def LW_SPM(ds,dt,ntag,filename):
     # Initial condition
     N = np.zeros([Nsizes]) # Store for the current timepoint
 
-    # Fitness functions
+    ##--- Fitness functions
     g = np.ones([Nsizes]) # growth rate
     #g[0:int(Nsizes/2)] = np.linspace(0,-1,int(Nsizes/2))
     r = np.zeros([Nsizes])  # reproduction
-    r[int(Nsizes/4):-1] = 0
+    r[int(Nsizes/3):-1] = 0
     mu = np.zeros([Nsizes]) # mortality
-    mu[int(Nsizes/2):-1] = 0
+    mu[:] = 0.01
+    mu[int(Nsizes/3):-1] = 0.4
+    ##---
 
     # Difference matrices
     D1 = np.zeros([Nsizes,Nsizes]) # Store for 1st finite difference matrix
@@ -57,8 +59,8 @@ def LW_SPM(ds,dt,ntag,filename):
     a3[:] = (g[:]**2)*(dt**2)/2
 
     # Initial condition
-    N[:] = np.exp(-(sizes-10)**2) # Initial condition setter
-
+    N[:] = np.exp(-(sizes-5)**2) # Initial condition setter
+    
     with open(filename + 'test_' + str(ntag) + '.txt', 'w') as file: # Initialise an outputter file (safe)
         for t,T in enumerate(times): # Loop on times
 
@@ -73,6 +75,10 @@ def LW_SPM(ds,dt,ntag,filename):
             N[:] = a1[:]*N[:] + a2[:]*(D1.dot(N)) + a3[:]*(D2.dot(N))
             # Step 3 - half step time, mortality
             N[:] = N[:]*np.exp(-mu[:]*dt/2)
+
+            N[0] = 0
+            for n,s in enumerate(N):
+                N[0] += r[n]*s*ds
             
         for n in N: # Output the final time solution
             file.write(str(n))

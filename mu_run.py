@@ -6,7 +6,7 @@
 
 import numpy as np # Numpy for numpy
 import matplotlib.pyplot as plt
-from function_LW2 import LW_SPM2
+from alternative_solvers.function_LW2 import LW_SPM2
 
 # Check convergence in s-dimension.
 # ds0 = 0.005

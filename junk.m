@@ -7,8 +7,8 @@
 %%filename = ['output_firstOrder.txt'];
 close all
 
-for i = 0
-filename = ['ds_convergence/test_' num2str(i) '.txt'];
+for i = 1
+filename = ['example1/test_' num2str(i) '.txt'];
 A = readmatrix(filename);
 
 plot(A(1,:))
@@ -17,15 +17,16 @@ end
 
 %% Make a video 
 
-filename = ['ds_convergence/test_' num2str(0) '.txt'];
+filename = ['example1/test_' num2str(1) '.txt'];
 A = readmatrix(filename);
-% v = VideoWriter("secondOrderTest4.avi");
-% open(v)
+filename = ['example2/test_' num2str(1) '.txt'];
+B = readmatrix(filename);
+%v = VideoWriter("ExampleComparison.avi");
+%open(v)
 
 % Dimensionalisation
-CFL = 0.5;
-ds = 0.1;
-dt = 0.005;
+ds = 0.01;
+dt = 0.01;
 
 % Array sizes
 [Nt,Ns] = size(A);
@@ -33,72 +34,21 @@ dt = 0.005;
 ss = linspace(0,ds*Ns,Ns); % Sizes
 tt = linspace(0,dt*Nt,Nt); % Times
 
+n = 10;
+
 % Loop through times
-for i = 1%:10:4000
+for i = 1:10:1000
 
-    plot(ss,A(i,:),'k-','LineWidth',2)
+    plot(ss(1:n:end),A(i,1:n:end),'b-','LineWidth',5)
     hold on;
-    plot(ss,exp(-(ss-10-(i-1)*dt).^2),'r--','LineWidth',2)
-    ylim([-1,10])
+    plot(ss(1:n:end),B(i,1:n:end),'r-','LineWidth',5)
+    %plot(ss,exp(-(ss-5-(i-1)*dt).^2),'r--','LineWidth',2)
+    ylim([-0.2,1.2])
+    pause(0.3)
 
-    % frame = getframe(gcf);
-    % writeVideo(v,frame);
+    %frame = getframe(gcf);
+    %writeVideo(v,frame);
 
     hold off
 
 end
-
-% %% old
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% v = VideoWriter("SPM.avi");
-% open(v)
-
-% range = 11:1:2000;
-% s = length(A(1,:));
-% c = jet(length(range));
-
-% dt = 0.05;
-% ds = dt*2;
-
-% for i = 1:length(range) 
-
-%     n = range(i);
-
-%     for j = -10:10
-%         plot(A(n+j,:),'color',c(i,:))
-%         plot(sol())
-%         ylim([0,1])
-%         hold on;
-
-%     end
-
-%     frame = getframe(gcf);
-%     writeVideo(v,frame);
-%     hold off;
-
-% end
-
-% %%
-
-% % Dimensionalisation
-% CFL = 0.5;
-% ds = 0.01;
-% dt = ds*CFL;
-
-% % Array sizes
-% [Nt,Ns] = size(A);
-
-% ss = linspace(0,ds*Ns,Ns); % Sizes
-% tt = linspace(0,dt*Nt,Nt); % Times
-
-% % Loop through times
-% for i = 1:10:200
-
-%     plot(ss,A(i,:),'k-','LineWidth',2)
-%     hold on;
-%     plot(ss,exp(-(ss-10-(i-1)*dt).^2),'r--','LineWidth',2)
-%     hold off
-%     pause(0.5)
-
-% end
